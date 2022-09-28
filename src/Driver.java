@@ -1,7 +1,7 @@
 public class Driver {
     public static void main(String[] args) {
         try {
-            new GUI();
+            new Menu();
         }
         catch(ArrayIndexOutOfBoundsException e){}
     }

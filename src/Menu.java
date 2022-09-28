@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class GUI implements MouseListener {
+public class Menu implements MouseListener {
 
     private JFrame frame;
     private JPanel panel;
@@ -15,12 +15,12 @@ public class GUI implements MouseListener {
     private JPanel boardP;
     private JButton[][] tiles;
 
-    private MSBlock[][] blocks;
+    private Block[][] blocks;
 
     private int dim = 20;
     private int count = -1;
 
-    public GUI(){
+    public Menu(){
         frame = new JFrame();
         panel = new JPanel();
         play = new JButton(Integer.toString(count));
@@ -157,20 +157,22 @@ public class GUI implements MouseListener {
             this.gameBoard(dim);
         }
 
-        System.out.println("im fr lost now");
-
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[i].length; j++) {
                 if (e.getSource() == tiles[i][j]) {
-                    System.out.println(i + "," + j);
                     if(blocks == null && e.getButton() == 1){
-                        blocks = MSBlock.makeBoard(dim, i, j);
+                        blocks = Block.makeBoard(dim, i, j);
                         //showBoard();
                         showTile(i, j);
                         return;
                     }
                     if(e.getButton() == 3){
-                        tiles[i][j].setBackground(Color.red);
+                        if(tiles[i][j].getBackground() == Color.red){
+                            tiles[i][j].setBackground(new Color(64, 168, 222));
+                        }
+                        else {
+                            tiles[i][j].setBackground(Color.red);
+                        }
                         return;
                     }
                     if(e.getButton() == 1){
@@ -189,7 +191,6 @@ public class GUI implements MouseListener {
 
     @Override
     public void mouseReleased(MouseEvent e) {
-
     }
 
     @Override

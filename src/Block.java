@@ -1,48 +1,73 @@
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
 import java.util.Random;
 
-public class MSBlock {
+/**
+ * Minesweeper Block
+ */
+public class Block {
 
+    /**
+     * Flag for if the block is a bomb.
+     */
     private Boolean bomb;
+    /**
+     * Flag for if the block is visible in the GUI.
+     */
     private Boolean visible;
+    /**
+     * Number of surrounding bombs.
+     */
     private int surr = 0;
 
-    public MSBlock(){
+    /**
+     * Constructor, sets visible and bomb to false.
+     */
+    public Block(){
         visible = false;
         bomb = false;
     }
 
+    /**
+     * Gets bomb.
+     * @return bomb flag.
+     */
     public Boolean getBomb(){
         return bomb;
     }
 
+    /**
+     * Gets visible.
+     * @return visible flag.
+     */
     public Boolean getVisible(){
         return visible;
     }
 
+    /**
+     * Gets number of surrounding bombs.
+     * @return Int number of surrounding bombs.
+     */
     public int getSurr(){
         return surr;
     }
 
+    /**
+     * Sets the bomb flag to true.
+     */
     public void setBomb(){
         bomb = true;
     }
 
-    public void setBomb(boolean flag){
-        bomb = flag;
-    }
-
+    /**
+     * Sets the visible flag to true.
+     */
     public void setVisible(){
         visible = true;
     }
 
-    public void setSurr(int surr){
-        surr = surr;
-    }
-
-
+    /**
+     * Increments the number of surrounding bombs value.
+     */
     public void upSurr(){
         surr++;
     }
@@ -56,23 +81,24 @@ public class MSBlock {
      * @param x The starting x location.
      * @return The created baord of Blocks.
      */
-    public static MSBlock[][] makeBoard(int dim, int y, int x){
-        System.out.println("DID THIS WORK???");
+    public static Block[][] makeBoard(int dim, int y, int x){
         //random numbers
         int num1;
         int num2;
-        MSBlock[][] Blocks = new MSBlock[dim][dim];
+
+        //Creates new board
+        Block[][] Blocks = new Block[dim][dim];
 
         Random r = new Random();
 
         //Initializes board
         for(int i = 0; i < dim; i++){
             for(int j = 0; j < dim; j++){
-                Blocks[i][j] = new MSBlock();
+                Blocks[i][j] = new Block();
             }
         }
 
-        //Places bombs in to the list
+        //Place bombs in to the list
         for(int bombCap = (dim*dim)/4; bombCap > 0; bombCap--){
 
             //Random coordinates for bomb placement
@@ -85,21 +111,29 @@ public class MSBlock {
                 System.out.println("yuh");
                 continue;
             }
+            //Makes the block a bomb if not already a bomb
             if(!Blocks[num1][num2].getBomb()){
                 Blocks[num1][num2].setBomb();
                 bombNum(Blocks, num1, num2);
             }
+            //Skips otherwise
             else{
                 bombCap++;
             }
         }
 
-
-
         return Blocks;
     }
 
-    private static void bombNum(MSBlock[][] Blocks, int i, int j){
+    /**
+     * Increments surr for all surrounding blocks of the bomb.
+     * @param Blocks The board of blocks.
+     * @param i y of the bomb.
+     * @param j x of the bomb.
+     */
+    private static void bombNum(Block[][] Blocks, int i, int j){
+
+        //Catches invalid indexes
         try {
             Blocks[i + 1][j].upSurr();
         }
@@ -132,9 +166,5 @@ public class MSBlock {
             Blocks[i][j - 1].upSurr();
         }
         catch (ArrayIndexOutOfBoundsException e){}
-    }
-
-    public static void main(String[] args){
-
     }
 }
