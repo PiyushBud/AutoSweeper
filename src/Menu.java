@@ -8,180 +8,38 @@ public class Menu implements MouseListener {
 
     private JFrame frame;
     private JPanel panel;
+
     private JButton play;
-    private JButton next;
-
-    private JFrame boardF;
-    private JPanel boardP;
-    private JButton[][] tiles;
-
-    private Block[][] blocks;
-
-    private int dim = 20;
-    private int count = -1;
+    private JButton auto;
+    private JButton exit;
 
     public Menu(){
         frame = new JFrame();
         panel = new JPanel();
-        play = new JButton(Integer.toString(count));
-        next = new JButton("Go Next");
+
+        play = new JButton("Play");
+        auto = new JButton("Auto Solve");
+        exit = new JButton("Exit");
+
 
         play.addMouseListener(this);
-        next.addMouseListener(this);
+        auto.addMouseListener(this);
+        exit.addMouseListener(this);
 
         panel.add(play);
-        panel.add(next);
+        panel.add(auto);
+        panel.add(exit);
 
         frame.setSize(500, 300);
         frame.add(panel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setTitle("Testing");
+        frame.setTitle("AutoSweeper");
         frame.setVisible(true);
-    }
-
-    private void gameBoard(int dim){
-
-        this.dim = dim;
-        boardP = new JPanel();
-        boardP.setBounds(50, 50, 900, 900);
-        boardP.setLayout(new GridLayout(dim, dim, 1, 1));
-        boardP.setBackground(Color.GRAY);
-
-        tiles = new JButton[dim][dim];
-
-        for(int i = 0; i < dim; i++){
-            for(int j = 0; j < dim; j++){
-                tiles[i][j] = new JButton();
-                tiles[i][j].setBackground(new Color(64, 168, 222));
-                tiles[i][j].addMouseListener(this);
-                boardP.add(tiles[i][j]);
-
-            }
-        }
-
-        boardF = new JFrame();
-        boardF.setLayout(null);
-        boardF.add(boardP);
-        boardF.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        boardF.setSize(1000, 1500);
-        boardF.setVisible(true);
-    }
-
-    private void showTile(int i, int j){
-        if(i < 0 || j < 0 || i >= dim || j >= dim){
-            throw new ArrayIndexOutOfBoundsException();
-        }
-
-        if(blocks[i][j].getVisible()){
-            return;
-        }
-        if(blocks[i][j].getBomb()){
-            tiles[i][j].setBackground(Color.black);
-            return;
-            //gameOver();
-        }
-
-        if(blocks[i][j].getSurr() == 0){
-            showZeros(i, j);
-            return;
-        }
-
-        tiles[i][j].setBackground(Color.white);
-        tiles[i][j].setText(String.valueOf(blocks[i][j].getSurr()));
-        blocks[i][j].setVisible();
-    }
-
-    private void showZeros(int i, int j){
-        if(i < 0 || j < 0 || i >= dim || j >= dim){
-            throw new ArrayIndexOutOfBoundsException();
-        }
-        if(blocks[i][j].getSurr() == 0){
-            tiles[i][j].setBackground(Color.white);
-            tiles[i][j].setText(String.valueOf(blocks[i][j].getSurr()));
-            blocks[i][j].setVisible();
-            try{
-                showTile(i, j+1);
-            }
-            catch (ArrayIndexOutOfBoundsException e){}
-            try{
-                showTile(i, j-1);
-            }
-            catch (ArrayIndexOutOfBoundsException e){}
-            try{
-                showTile(i+1, j);
-            }
-            catch (ArrayIndexOutOfBoundsException e){}
-            try{
-                showTile(i+1, j+1);
-            }
-            catch (ArrayIndexOutOfBoundsException e){}
-            try{
-                showTile(i+1, j-1);
-            }
-            catch (ArrayIndexOutOfBoundsException e){}
-            try{
-                showTile(i-1, j);
-            }
-            catch (ArrayIndexOutOfBoundsException e){}
-            try{
-                showTile(i-1, j+1);
-            }
-            catch (ArrayIndexOutOfBoundsException e){}
-            try{
-                showTile(i-1, j-1);
-            }
-            catch (ArrayIndexOutOfBoundsException e){}
-        }
-    }
-
-    private void showBoard(){
-        for(int i = 0; i < tiles.length; i++){
-            for(int j = 0; j < tiles[i].length; j++){
-                if(blocks[i][j].getBomb()) {
-                    tiles[i][j].setBackground(Color.black);
-                }
-            }
-        }
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (e.getSource() == play) {
-            count = e.getButton();
-            play.setText(Integer.toString(count));
-        }
 
-        if (e.getSource() == next) {
-            frame.setVisible(false);
-            frame.dispose();
-            this.gameBoard(dim);
-        }
-
-        for (int i = 0; i < tiles.length; i++) {
-            for (int j = 0; j < tiles[i].length; j++) {
-                if (e.getSource() == tiles[i][j]) {
-                    if(blocks == null && e.getButton() == 1){
-                        blocks = Block.makeBoard(dim, i, j);
-                        //showBoard();
-                        showTile(i, j);
-                        return;
-                    }
-                    if(e.getButton() == 3){
-                        if(tiles[i][j].getBackground() == Color.red){
-                            tiles[i][j].setBackground(new Color(64, 168, 222));
-                        }
-                        else {
-                            tiles[i][j].setBackground(Color.red);
-                        }
-                        return;
-                    }
-                    if(e.getButton() == 1){
-                        showTile(i, j);
-                        return;
-                    }
-                }
-            }
-        }
     }
 
     @Override
@@ -191,6 +49,14 @@ public class Menu implements MouseListener {
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        if(e.getSource() == exit){
+            System.exit(0);
+        }
+        if (e.getSource() == play) {
+            frame.setVisible(false);
+            frame.dispose();
+            new Game(20);
+        }
     }
 
     @Override

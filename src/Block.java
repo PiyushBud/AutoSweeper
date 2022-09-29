@@ -108,7 +108,6 @@ public class Block {
             //Skips if within initial 3x3 starting location
             if((Math.abs(y - num1) <= 1) && (Math.abs(x - num2) <= 1)){
                 bombCap++;
-                System.out.println("yuh");
                 continue;
             }
             //Makes the block a bomb if not already a bomb
