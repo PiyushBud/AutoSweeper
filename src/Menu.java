@@ -3,7 +3,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
+//Lets test if this will work :)
 public class Menu implements MouseListener {
 
     private JFrame frame;
