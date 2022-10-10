@@ -99,6 +99,9 @@ public class Game implements MouseListener {
     }
 
     private void flag(JButton[][] tiles, int i, int j){
+        if(blocks[i][j].getVisible()){
+            return;
+        }
         if(tiles[i][j].getBackground() == Color.red){
             tiles[i][j].setBackground(new Color(64, 168, 222));
             numBombs++;
