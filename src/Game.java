@@ -3,6 +3,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
 public class Game implements MouseListener {
 
@@ -15,11 +16,18 @@ public class Game implements MouseListener {
     private int numBombs;
 
     private Block[][] blocks;
+    private int remaining;
     private int dim;
 
-    public Game(int dim){
+    private boolean auto;
+    //private Auto solver;
+    private int ai, aj;
+
+    public Game(int dim, boolean auto){
+        this.auto = auto;
         this.dim = dim;
         numBombs = (dim*dim)/4;
+        remaining = (dim*dim) - numBombs;
 
         boardP = new JPanel();
         boardP.setBounds(50, 50, 900, 900);
@@ -73,13 +81,18 @@ public class Game implements MouseListener {
                     if(blocks == null && e.getButton() == 1){
                         blocks = Block.makeBoard(dim, i, j);
                         //showBoard();
-                        showTile(i, j);
+                        if(auto){
+                            //solver = new Auto();
+                        }
+                        else {
+                            showTile(i, j);
+                        }
                         return;
                     }
                     if(e.getButton() == 3){
                         flag(tiles, i, j);
                     }
-                    if(e.getButton() == 1){
+                    if(e.getButton() == 1 && !blocks[i][j].getFlag()){
                         showTile(i, j);
                         return;
                     }
@@ -105,14 +118,16 @@ public class Game implements MouseListener {
         if(tiles[i][j].getBackground() == Color.red){
             tiles[i][j].setBackground(new Color(64, 168, 222));
             numBombs++;
-            bombs.setText(String.valueOf(numBombs));
+            blocks[i][j].setFlag(false);
         }
         else {
             tiles[i][j].setBackground(Color.red);
             numBombs--;
-            bombs.setText(String.valueOf(numBombs));
+            blocks[i][j].setFlag(true);
         }
     }
+
+    //shows a clicked tile
     private void showTile(int i, int j){
         if(i < 0 || j < 0 || i >= dim || j >= dim){
             throw new ArrayIndexOutOfBoundsException();
@@ -138,8 +153,14 @@ public class Game implements MouseListener {
         tiles[i][j].setBackground(Color.white);
         tiles[i][j].setText(String.valueOf(blocks[i][j].getSurr()));
         blocks[i][j].setVisible();
+        remaining--;
+        if(remaining == 0){
+            System.out.println("You win");
+            System.exit(0);
+        }
     }
 
+    //Recursively clears zero tiles
     private void showZeros(int i, int j){
         if(i < 0 || j < 0 || i >= dim || j >= dim){
             throw new ArrayIndexOutOfBoundsException();
@@ -191,6 +212,160 @@ public class Game implements MouseListener {
                 }
             }
         }
+    }
+
+    private ArrayList<Block> next(){
+        ArrayList<Block> retArr = new ArrayList<>(16);
+        ArrayList<Block> vis = findSurroundingVis();
+        ArrayList<Block> invis = findSurroundingInvis();
+
+        if(invis.size() == 0){
+            return null;
+        }
+
+        if(invis.size() == blocks[ai][aj].getSurr()){
+            return invis;
+        }
+
+        return null;
+    }
+
+    private void findNext(){
+        for(int k = ai; k < blocks.length; k++){
+            for(int l = aj; l < blocks[k].length; l++){
+                if(blocks[k][l].getVisible()){
+                    ai = k;
+                    aj = l;
+                    return;
+                }
+            }
+        }
+    }
+
+    private ArrayList<Block> findSurroundingInvis(){
+        ArrayList<Block> num = new ArrayList<>(8);
+        int index = 0;
+        try{
+            if(!blocks[ai][aj+1].getVisible()){
+                num.set(index, blocks[ai][aj+1]);
+                index++;
+            }
+        }
+        catch (ArrayIndexOutOfBoundsException e){}
+        try{
+            if(!blocks[ai][aj-1].getVisible()){
+                num.set(index, blocks[ai][aj-1]);
+                index++;
+            }
+        }
+        catch (ArrayIndexOutOfBoundsException e){}
+        try{
+            if(!blocks[ai+1][aj].getVisible()){
+                num.set(index, blocks[ai+1][aj]);
+                index++;
+            }
+        }
+        catch (ArrayIndexOutOfBoundsException e){}
+        try{
+            if(!blocks[ai-1][aj].getVisible()){
+                num.set(index, blocks[ai-1][aj]);
+                index++;
+            }
+        }
+        catch (ArrayIndexOutOfBoundsException e){}
+        try{
+            if(!blocks[ai+1][aj+1].getVisible()){
+                num.set(index, blocks[ai+1][aj+1]);
+                index++;
+            }
+        }
+        catch (ArrayIndexOutOfBoundsException e){}
+        try{
+            if(!blocks[ai-1][aj+1].getVisible()){
+                num.set(index, blocks[ai-1][aj+1]);
+                index++;
+            }
+        }
+        catch (ArrayIndexOutOfBoundsException e){}
+        try{
+            if(!blocks[ai+1][aj-1].getVisible()){
+                num.set(index, blocks[ai+1][aj-1]);
+                index++;
+            }
+        }
+        catch (ArrayIndexOutOfBoundsException e){}
+        try{
+            if(!blocks[ai-1][aj-1].getVisible()){
+                num.set(index, blocks[ai-1][aj-1]);
+                index++;
+            }
+        }
+        catch (ArrayIndexOutOfBoundsException e){}
+
+        return num;
+    }
+
+    private ArrayList<Block> findSurroundingVis(){
+        ArrayList<Block> num = new ArrayList<>(8);
+        int index = 0;
+        try{
+            if(blocks[ai][aj+1].getVisible()){
+                num.set(index, blocks[ai][aj+1]);
+                index++;
+            }
+        }
+        catch (ArrayIndexOutOfBoundsException e){}
+        try{
+            if(blocks[ai][aj-1].getVisible()){
+                num.set(index, blocks[ai][aj-1]);
+                index++;
+            }
+        }
+        catch (ArrayIndexOutOfBoundsException e){}
+        try{
+            if(blocks[ai+1][aj].getVisible()){
+                num.set(index, blocks[ai+1][aj]);
+                index++;
+            }
+        }
+        catch (ArrayIndexOutOfBoundsException e){}
+        try{
+            if(blocks[ai-1][aj].getVisible()){
+                num.set(index, blocks[ai-1][aj]);
+                index++;
+            }
+        }
+        catch (ArrayIndexOutOfBoundsException e){}
+        try{
+            if(blocks[ai+1][aj+1].getVisible()){
+                num.set(index, blocks[ai+1][aj+1]);
+                index++;
+            }
+        }
+        catch (ArrayIndexOutOfBoundsException e){}
+        try{
+            if(blocks[ai-1][aj+1].getVisible()){
+                num.set(index, blocks[ai-1][aj+1]);
+                index++;
+            }
+        }
+        catch (ArrayIndexOutOfBoundsException e){}
+        try{
+            if(blocks[ai+1][aj-1].getVisible()){
+                num.set(index, blocks[ai+1][aj-1]);
+                index++;
+            }
+        }
+        catch (ArrayIndexOutOfBoundsException e){}
+        try{
+            if(blocks[ai-1][aj-1].getVisible()){
+                num.set(index, blocks[ai-1][aj-1]);
+                index++;
+            }
+        }
+        catch (ArrayIndexOutOfBoundsException e){}
+
+        return num;
     }
 }
 

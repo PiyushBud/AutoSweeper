@@ -3,7 +3,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-//Lets test if this will work :)
+
 public class Menu implements MouseListener {
 
     private JFrame frame;
@@ -13,6 +13,10 @@ public class Menu implements MouseListener {
     private JButton auto;
     private JButton exit;
 
+    /**
+     * Sets up the menu screen with the options
+     * Play, Auto Solve, and Exit.
+     */
     public Menu(){
         frame = new JFrame();
         panel = new JPanel();
@@ -47,15 +51,28 @@ public class Menu implements MouseListener {
 
     }
 
+    /**
+     * Called when mouse click is released.
+     * Starts Play, Auto, or Exit depending on
+     * the button clicked.
+     * @param e The mouse event
+     */
     @Override
     public void mouseReleased(MouseEvent e) {
         if(e.getSource() == exit){
             System.exit(0);
         }
+
         if (e.getSource() == play) {
             frame.setVisible(false);
             frame.dispose();
-            new Game(20);
+            new Game(20, false);
+        }
+
+        if (e.getSource() == auto){
+            frame.setVisible(false);
+            frame.dispose();
+            new Game(20, true);
         }
     }
 

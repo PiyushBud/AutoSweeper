@@ -1,22 +1,40 @@
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+/*
 public class Auto {
-
+/*
     private Block[][] blocks;
     private int i;
     private int j;
+    */
 
-    public Auto(Block[][] blocks, int i, int j){
-        this.blocks = blocks;
+    /*
+    public Auto(int dim, int i, int j){
         this.i = i;
         this.j = j;
+        this.blocks = Block.makeBoard(dim, i, j);
     }
 
-    public int next(){
-        findNext();
-        int[] surrounding = findSurrounding();
-        if(blocks[i][j].getSurr() == (findSurrounding().length/2)){
+    /**
+     * Finds next block to check surroundings for blocks to flag
+     * or clear.
+     * @return 16 by 2 2D array with first 8 rows being coordinates to flag
+     * and last 8 rows being coordinates to clear.
 
+    public ArrayList<Block> next(int i, int j, Block[] blocks, ){
+        ArrayList<Block> retArr = new ArrayList<>(16);
+        ArrayList<Block> vis = findSurroundingVis();
+        ArrayList<Block> invis = findSurroundingInvis();
+
+        if(invis.size() == 0){
+            return null;
         }
-        return 0;
+
+        if(invis.size() == blocks[i][j].getSurr()){
+            return invis;
+        }
+
+        return null;
     }
 
     private void findNext(){
@@ -31,80 +49,130 @@ public class Auto {
         }
     }
 
-    private int[] findSurrounding(){
-        int[] num = new int[16];
+    private ArrayList<Block> findSurroundingInvis(){
+        ArrayList<Block> num = new ArrayList<>(8);
         int index = 0;
         try{
             if(!blocks[i][j+1].getVisible()){
-                num[index] = i;
-                index++;
-                num[index] = j+1;
+                num.set(index, blocks[i][j+1]);
                 index++;
             }
         }
         catch (ArrayIndexOutOfBoundsException e){}
         try{
             if(!blocks[i][j-1].getVisible()){
-                num[index] = i;
-                index++;
-                num[index] = j-1;
+                num.set(index, blocks[i][j-1]);
                 index++;
             }
         }
         catch (ArrayIndexOutOfBoundsException e){}
         try{
             if(!blocks[i+1][j].getVisible()){
-                num[index] = i+1;
-                index++;
-                num[index] = j;
+                num.set(index, blocks[i+1][j]);
                 index++;
             }
         }
         catch (ArrayIndexOutOfBoundsException e){}
         try{
             if(!blocks[i-1][j].getVisible()){
-                num[index] = i-1;
-                index++;
-                num[index] = j;
+                num.set(index, blocks[i-1][j]);
                 index++;
             }
         }
         catch (ArrayIndexOutOfBoundsException e){}
         try{
             if(!blocks[i+1][j+1].getVisible()){
-                num[index] = i+1;
-                index++;
-                num[index] = j+1;
+                num.set(index, blocks[i+1][j+1]);
                 index++;
             }
         }
         catch (ArrayIndexOutOfBoundsException e){}
         try{
             if(!blocks[i-1][j+1].getVisible()){
-                num[index] = i-1;
-                index++;
-                num[index] = j+1;
+                num.set(index, blocks[i-1][j+1]);
                 index++;
             }
         }
         catch (ArrayIndexOutOfBoundsException e){}
         try{
             if(!blocks[i+1][j-1].getVisible()){
-                num[index] = i+1;
+                num.set(index, blocks[i+1][j-1]);
                 index++;
-                num[index] = j-1;
-                index++;            }
+            }
         }
         catch (ArrayIndexOutOfBoundsException e){}
         try{
             if(!blocks[i-1][j-1].getVisible()){
-                num[index] = i-1;
+                num.set(index, blocks[i-1][j-1]);
                 index++;
-                num[index] = j-1;
-                index++;            }
+            }
+        }
+        catch (ArrayIndexOutOfBoundsException e){}
+
+        return num;
+    }
+
+    private ArrayList<Block> findSurroundingVis(){
+        ArrayList<Block> num = new ArrayList<>(8);
+        int index = 0;
+        try{
+            if(blocks[i][j+1].getVisible()){
+                num.set(index, blocks[i][j+1]);
+                index++;
+            }
+        }
+        catch (ArrayIndexOutOfBoundsException e){}
+        try{
+            if(blocks[i][j-1].getVisible()){
+                num.set(index, blocks[i][j-1]);
+                index++;
+            }
+        }
+        catch (ArrayIndexOutOfBoundsException e){}
+        try{
+            if(blocks[i+1][j].getVisible()){
+                num.set(index, blocks[i+1][j]);
+                index++;
+            }
+        }
+        catch (ArrayIndexOutOfBoundsException e){}
+        try{
+            if(blocks[i-1][j].getVisible()){
+                num.set(index, blocks[i-1][j]);
+                index++;
+            }
+        }
+        catch (ArrayIndexOutOfBoundsException e){}
+        try{
+            if(blocks[i+1][j+1].getVisible()){
+                num.set(index, blocks[i+1][j+1]);
+                index++;
+            }
+        }
+        catch (ArrayIndexOutOfBoundsException e){}
+        try{
+            if(blocks[i-1][j+1].getVisible()){
+                num.set(index, blocks[i-1][j+1]);
+                index++;
+            }
+        }
+        catch (ArrayIndexOutOfBoundsException e){}
+        try{
+            if(blocks[i+1][j-1].getVisible()){
+                num.set(index, blocks[i+1][j-1]);
+                index++;
+            }
+        }
+        catch (ArrayIndexOutOfBoundsException e){}
+        try{
+            if(blocks[i-1][j-1].getVisible()){
+                num.set(index, blocks[i-1][j-1]);
+                index++;
+            }
         }
         catch (ArrayIndexOutOfBoundsException e){}
 
         return num;
     }
 }
+     */

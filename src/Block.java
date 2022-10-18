@@ -19,12 +19,23 @@ public class Block {
      */
     private int surr = 0;
 
+    private int aSurr = 0;
+
+    private int x;
+
+    private int y;
+
+    private boolean flag;
+
     /**
      * Constructor, sets visible and bomb to false.
      */
-    public Block(){
+    public Block(int i, int j){
+        y = i;
+        x = j;
         visible = false;
         bomb = false;
+        flag = false;
     }
 
     /**
@@ -51,6 +62,10 @@ public class Block {
         return surr;
     }
 
+    public boolean getFlag(){
+        return flag;
+    }
+
     /**
      * Sets the bomb flag to true.
      */
@@ -65,11 +80,20 @@ public class Block {
         visible = true;
     }
 
+    public void setFlag(boolean flag){
+        this.flag = flag;
+    }
+
     /**
      * Increments the number of surrounding bombs value.
      */
     public void upSurr(){
         surr++;
+        aSurr++;
+    }
+
+    public void downAsurr(){
+        aSurr--;
     }
 
     /**
@@ -79,7 +103,7 @@ public class Block {
      * @param dim Dimensions of new square board.
      * @param y The starting y location.
      * @param x The starting x location.
-     * @return The created baord of Blocks.
+     * @return The created board of Blocks.
      */
     public static Block[][] makeBoard(int dim, int y, int x){
         //random numbers
@@ -94,7 +118,7 @@ public class Block {
         //Initializes board
         for(int i = 0; i < dim; i++){
             for(int j = 0; j < dim; j++){
-                Blocks[i][j] = new Block();
+                Blocks[i][j] = new Block(i, j);
             }
         }
 
