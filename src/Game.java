@@ -137,7 +137,7 @@ public class Game implements MouseListener {
             tiles[i][j].setBackground(Color.black);
             boardF.setVisible(false);
             boardF.dispose();
-            new GameOver();
+            new EndScreen(false);
             return;
         }
 
@@ -155,8 +155,7 @@ public class Game implements MouseListener {
         blocks[i][j].setVisible();
         remaining--;
         if(remaining == 0){
-            System.out.println("You win");
-            System.exit(0);
+            new EndScreen(true);
         }
     }
 
@@ -214,6 +213,7 @@ public class Game implements MouseListener {
         }
     }
 
+    /*
     private ArrayList<Block> next(){
         ArrayList<Block> retArr = new ArrayList<>(16);
         ArrayList<Block> vis = findSurroundingVis();
@@ -367,6 +367,8 @@ public class Game implements MouseListener {
 
         return num;
     }
+
+     */
 }
 
 
