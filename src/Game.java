@@ -24,6 +24,9 @@ public class Game implements MouseListener {
     private int ai, aj;
 
     public Game(int dim, boolean auto){
+        if (auto){
+
+        }
         this.auto = auto;
         this.dim = dim;
         numBombs = (dim*dim)/4;
@@ -75,6 +78,10 @@ public class Game implements MouseListener {
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        if (auto){
+            return;
+        }
+
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[i].length; j++) {
                 if (e.getSource() == tiles[i][j]) {
@@ -134,7 +141,6 @@ public class Game implements MouseListener {
         }
 
         if(blocks[i][j].getBomb()){
-            tiles[i][j].setBackground(Color.black);
             boardF.setVisible(false);
             boardF.dispose();
             new EndScreen(false);
@@ -206,16 +212,27 @@ public class Game implements MouseListener {
     private void showBoard(){
         for(int i = 0; i < tiles.length; i++){
             for(int j = 0; j < tiles[i].length; j++){
-                if(blocks[i][j].getBomb()) {
-                    tiles[i][j].setBackground(Color.black);
+                if(blocks[i][j].getVisible()) {
+                    tiles[i][j].setBackground(Color.white);
+                    tiles[i][j].setText(String.valueOf(blocks[i][j].getSurr()));
+                    continue;
+                }
+                else{
+                    tiles[i][j].setBackground(new Color(64, 168, 222));
+                    tiles[i][j].setText("");
+                }
+                if(blocks[i][j].getFlag()){
+                    tiles[i][j].setBackground(Color.red);
+                    tiles[i][j].setText("");
                 }
             }
         }
     }
 
-    /*
-    private ArrayList<Block> next(){
-        ArrayList<Block> retArr = new ArrayList<>(16);
+
+    private Block[][] next(Block[][] board){
+
+        Block[][] retBoard = board;
         ArrayList<Block> vis = findSurroundingVis();
         ArrayList<Block> invis = findSurroundingInvis();
 
@@ -224,7 +241,7 @@ public class Game implements MouseListener {
         }
 
         if(invis.size() == blocks[ai][aj].getSurr()){
-            return invis;
+            return null;
         }
 
         return null;
@@ -367,8 +384,6 @@ public class Game implements MouseListener {
 
         return num;
     }
-
-     */
 }
 
 
