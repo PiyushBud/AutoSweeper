@@ -1,16 +1,16 @@
-
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-public class Game implements MouseListener {
+public class Game implements MouseListener, KeyListener {
 
     private JButton[][] tiles;
     private JFrame boardF;
     private JPanel boardP;
-    private JPanel score;
 
     private JLabel bombs;
     private int numBombs;
@@ -20,12 +20,14 @@ public class Game implements MouseListener {
     private int dim;
 
     private boolean auto;
-    //private Auto solver;
-    private int ai, aj;
+    private Auto solver;
+    private ArrayList<Block[][]> boards;
+    private int index;
+    //private int ai, aj;
 
     public Game(int dim, boolean auto){
         if (auto){
-
+            index = 0;
         }
         this.auto = auto;
         this.dim = dim;
@@ -40,9 +42,6 @@ public class Game implements MouseListener {
         bombs = new JLabel(String.valueOf(numBombs));
         bombs.setBackground(Color.gray);
 
-        score = new JPanel();
-        score.add(bombs);
-
         tiles = new JButton[dim][dim];
 
         for(int i = 0; i < dim; i++){
@@ -50,6 +49,7 @@ public class Game implements MouseListener {
                 tiles[i][j] = new JButton();
                 tiles[i][j].setBackground(new Color(64, 168, 222));
                 tiles[i][j].addMouseListener(this);
+                tiles[i][j].addKeyListener(this);
                 boardP.add(tiles[i][j]);
 
             }
@@ -59,10 +59,11 @@ public class Game implements MouseListener {
 
         boardF = new JFrame();
         boardF.setLayout(null);
+        boardP.addKeyListener(this);
         boardF.add(boardP);
-        //boardF.add(score);
         boardF.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         boardF.setSize(1000, 1500);
+        boardF.addKeyListener(this);
         boardF.setVisible(true);
     }
 
@@ -78,22 +79,31 @@ public class Game implements MouseListener {
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        if (auto){
+
+        if(auto){
+            if(blocks == null){
+                for(int i = 0; i < tiles.length; i++){
+                    for(int j = 0; j < tiles[i].length; j++){
+                        if(e.getSource() == tiles[i][j]){
+                            blocks = Block.makeBoard(dim, i, j);
+                            //blocks = Block.cusBoard();
+                            showTile(i, j);
+                            solver = new Auto(blocks, i, j);
+                        }
+                    }
+                }
+                boards = solver.getList();
+                blocks = boards.get(index);
+            }
             return;
         }
 
-        for (int i = 0; i < tiles.length; i++) {
-            for (int j = 0; j < tiles[i].length; j++) {
-                if (e.getSource() == tiles[i][j]) {
+        for(int i = 0; i < tiles.length; i++) {
+            for(int j = 0; j < tiles[i].length; j++) {
+                if(e.getSource() == tiles[i][j]) {
                     if(blocks == null && e.getButton() == 1){
                         blocks = Block.makeBoard(dim, i, j);
-                        //showBoard();
-                        if(auto){
-                            //solver = new Auto();
-                        }
-                        else {
-                            showTile(i, j);
-                        }
+                        showTile(i, j);
                         return;
                     }
                     if(e.getButton() == 3){
@@ -115,6 +125,29 @@ public class Game implements MouseListener {
 
     @Override
     public void mouseExited(MouseEvent e) {
+
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if(e.getKeyCode() == 39){
+            index++;
+            blocks = boards.get(index);
+            showBoard();
+        }
+        if(e.getKeyCode() == 37){
+            index--;
+            blocks = boards.get(index);
+            showBoard();
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
 
     }
 
@@ -147,7 +180,7 @@ public class Game implements MouseListener {
             return;
         }
 
-        if(blocks[i][j].getVisible()){
+        if(blocks[i][j].getVisible() || blocks[i][j].getFlag()){
             return;
         }
 
@@ -229,7 +262,27 @@ public class Game implements MouseListener {
         }
     }
 
+    public static void printBoard(Block[][] blocks){
+        for(int i = 0; i < blocks.length; i++){
+            for(int j = 0; j < blocks[i].length; j++){
+                if(blocks[i][j].getFlag()){
+                    System.out.print("F ");
+                }
+                else if(blocks[i][j].getVisible()) {
+                    System.out.print(blocks[i][j].getSurr() + " ");
+                }
+                else{
+                    System.out.print("x ");
+                }
+            }
+            System.out.println();
+        }
+        System.out.println();
+        System.out.println();
 
+    }
+
+/*
     private Block[][] next(Block[][] board){
 
         Block[][] retBoard = board;
@@ -384,6 +437,10 @@ public class Game implements MouseListener {
 
         return num;
     }
+
+
+ */
+
 }
 
 

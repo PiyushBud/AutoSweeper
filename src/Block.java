@@ -19,8 +19,6 @@ public class Block {
      */
     private int surr = 0;
 
-    private int aSurr = 0;
-
     private int x;
 
     private int y;
@@ -66,6 +64,14 @@ public class Block {
         return flag;
     }
 
+    public int getY(){
+        return y;
+    }
+
+    public int getX(){
+        return x;
+    }
+
     /**
      * Sets the bomb flag to true.
      */
@@ -89,16 +95,11 @@ public class Block {
      */
     public void upSurr(){
         surr++;
-        aSurr++;
-    }
-
-    public void downAsurr(){
-        aSurr--;
     }
 
     /**
      * Static method to return a new square board. Sets up bombs and the number of bombs surrounding
-     * each square. Plants bombs in a 4th of all Blocks. Leaves at least a 3x3 clear area around
+     * each square. Plants bomb in a 4th of all Blocks. Leaves at least a 3x3 clear area around
      * the starting location.
      * @param dim Dimensions of new square board.
      * @param y The starting y location.
@@ -122,7 +123,7 @@ public class Block {
             }
         }
 
-        //Place bombs in to the list
+        //Place bombs on to the board
         for(int bombCap = (dim*dim)/4; bombCap > 0; bombCap--){
 
             //Random coordinates for bomb placement
@@ -148,6 +149,27 @@ public class Block {
         return Blocks;
     }
 
+    public static Block[][] cusBoard(){
+        Block[][] board = new Block[20][20];
+        for(int i = 0; i < board.length; i++){
+            for(int j = 0; j < board[i].length; j++){
+                board[i][j] = new Block(i, j);
+            }
+        }
+        board[0][3].setBomb();
+        board[1][3].setBomb();
+        board[3][0].setBomb();
+        board[3][1].setBomb();
+        board[3][2].setBomb();
+        for(int i = 0; i < board.length; i++){
+            for(int j = 0; j < board[i].length; j++){
+                if(board[i][j].getBomb()) {
+                    bombNum(board, i, j);
+                }
+            }
+        }
+        return board;
+    }
     /**
      * Increments surr for all surrounding blocks of the bomb.
      * @param Blocks The board of blocks.
