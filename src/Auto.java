@@ -1,14 +1,35 @@
 import java.util.ArrayList;
 
+/**
+ * Class to auto solve minesweeper boards.
+ * Assesses flagging and clearing based on surroundings of single blocks.
+ */
 public class Auto {
 
+    /**
+     * Board of minesweeper blocks.
+     */
     private Block[][] board;
+    /**
+     * Y position of current block.
+     */
     private int i;
+    /**
+     * X position of current block.
+     */
     private int j;
+    /**
+     * Number of bombs left to be flagged.
+     */
     private int flagCount;
 
 
-
+    /**
+     * Constructor.
+     * @param board The initial board.
+     * @param i Starting y position.
+     * @param j Starting x position.
+     */
     public Auto(Block[][] board, int i, int j){
         this.i = i;
         this.j = j;
@@ -17,10 +38,9 @@ public class Auto {
     }
 
     /**
-     * Finds next block to check surroundings for board to flag
-     * or clear.
-     * @return 16 by 2 2D array with first 8 rows being coordinates to flag
-     * and last 8 rows being coordinates to clear.
+     * Checks the surroundings of current position and flags or clears blocks
+     * based on algorithm.
+     * @return Integer 0 if changes to board occur and -1 otherwise.
      */
     public int next(){
         ArrayList<Block> vis = findSurroundingVis();
@@ -53,37 +73,52 @@ public class Auto {
     }
 
     /**
-     * Does all auto algo stuff to solve as much of the board as possible.
-     * @return ArrayList of all board states
+     * Runs the next algorithm and adds an updated board to a list of board states each time
+     * the next algorithm changes the board. Loops until no more actions are available, max counter
+     * is hit, or if all non-bomb tiles have been cleared.
+     * @return ArrayList of all board states to be cycled through in Game.
      */
     public ArrayList<Block[][]> getList(){
         int count = 0;
         int starti = i;
         int startj = j;
+        //Creates the return list and adds the initial board
         ArrayList<Block[][]> retList = new ArrayList<>();
         retList.add(copyBoard());
-        Game.printBoard(board);
         while(true){
+            //Finds next visible block
             findNext();
+
             if(i == starti && j == startj){
                 System.out.println("Out of Options Break");
                 System.out.println(j+","+i);
                 break;
             }
+
+            //Next algorithm changed the board
             if(next() == 0){
                 starti = i;
                 startj = j;
+                board[i][j].setCurr(true);
+                //Adds a copy of the 
                 retList.add(copyBoard());
-                Game.printBoard(board);
+                board[i][j].setCurr(false);
             }
 
+            //Full clear win condition
+            if(flagCount == 0){
+                retList.add(null);
+                break;
+            }
+
+            //Catch infinite loop
             if (count > 100000){
                 System.out.println("Count Break");
                 break;
             }
             count++;
         }
-        System.out.println(retList.size());
+        //System.out.println(retList.size());
         return retList;
     }
 
@@ -161,7 +196,8 @@ public class Auto {
         Block[][] newBoard = new Block[board.length][board.length];
         for(int l = 0; l < board.length; l++){
             for(int k = 0; k < board[l].length; k++){
-                newBoard[l][k] = board[l][k];
+                newBoard[l][k] = new Block(l, k, board[l][k].getSurr(), board[l][k].getVisible(), board[l][k].getBomb(), board[l][k].getFlag(), board[l][k].getCurr());
+
             }
         }
         return newBoard;
@@ -284,7 +320,7 @@ public class Auto {
         }
 
         if(board[l][k].getSurr() == 0){
-            clearZeros(i, j);
+            clearZeros(l, k);
             return;
         }
 
@@ -295,35 +331,35 @@ public class Auto {
     private void clearZeros(int l, int k){
         board[l][k].setVisible();
         try{
-            clearTile(i, j+1);
+            clearTile(l, k+1);
         }
         catch (ArrayIndexOutOfBoundsException e){}
         try{
-            clearTile(i, j-1);
+            clearTile(l, k-1);
         }
         catch (ArrayIndexOutOfBoundsException e){}
         try{
-            clearTile(i+1, j);
+            clearTile(l+1, k);
         }
         catch (ArrayIndexOutOfBoundsException e){}
         try{
-            clearTile(i+1, j+1);
+            clearTile(l+1, k+1);
         }
         catch (ArrayIndexOutOfBoundsException e){}
         try{
-            clearTile(i+1, j-1);
+            clearTile(l+1, k-1);
         }
         catch (ArrayIndexOutOfBoundsException e){}
         try{
-            clearTile(i-1, j);
+            clearTile(l-1, k);
         }
         catch (ArrayIndexOutOfBoundsException e){}
         try{
-            clearTile(i-1, j+1);
+            clearTile(l-1, k+1);
         }
         catch (ArrayIndexOutOfBoundsException e){}
         try{
-            clearTile(i-1, j-1);
+            clearTile(l-1, k-1);
         }
         catch (ArrayIndexOutOfBoundsException e){}
     }

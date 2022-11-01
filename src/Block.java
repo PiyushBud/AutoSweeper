@@ -25,6 +25,8 @@ public class Block {
 
     private boolean flag;
 
+    private boolean aCurrent;
+
     /**
      * Constructor, sets visible and bomb to false.
      */
@@ -34,6 +36,16 @@ public class Block {
         visible = false;
         bomb = false;
         flag = false;
+        aCurrent = false;
+    }
+    public Block(int i, int j, int surr, boolean vis, boolean bomb, boolean flag, boolean curr){
+        y = i;
+        x = j;
+        visible = vis;
+        this.bomb = bomb;
+        this.flag = flag;
+        this.surr = surr;
+        aCurrent = curr;
     }
 
     /**
@@ -64,6 +76,10 @@ public class Block {
         return flag;
     }
 
+    public boolean getCurr(){
+        return aCurrent;
+    }
+
     public int getY(){
         return y;
     }
@@ -88,6 +104,10 @@ public class Block {
 
     public void setFlag(boolean flag){
         this.flag = flag;
+    }
+
+    public void setCurr(boolean curr){
+        this.aCurrent = curr;
     }
 
     /**

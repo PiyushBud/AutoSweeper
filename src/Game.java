@@ -54,8 +54,11 @@ public class Game implements MouseListener, KeyListener {
 
             }
         }
-        boardP.add(new JLabel("Bombs:"));
-        boardP.add(bombs);
+
+        if(!auto) {
+            boardP.add(new JLabel("Bombs:"));
+            boardP.add(bombs);
+        }
 
         boardF = new JFrame();
         boardF.setLayout(null);
@@ -136,11 +139,21 @@ public class Game implements MouseListener, KeyListener {
     public void keyPressed(KeyEvent e) {
         if(e.getKeyCode() == 39){
             index++;
+            if(index >= boards.size()){
+                index = boards.size()-1;
+            }
             blocks = boards.get(index);
+            if(blocks == null){
+                new EndScreen(true);
+            }
             showBoard();
+
         }
         if(e.getKeyCode() == 37){
             index--;
+            if(index < 0){
+                index = 0;
+            }
             blocks = boards.get(index);
             showBoard();
         }
@@ -245,8 +258,14 @@ public class Game implements MouseListener, KeyListener {
     private void showBoard(){
         for(int i = 0; i < tiles.length; i++){
             for(int j = 0; j < tiles[i].length; j++){
+
                 if(blocks[i][j].getVisible()) {
-                    tiles[i][j].setBackground(Color.white);
+                    if(blocks[i][j].getCurr()){
+                        tiles[i][j].setBackground(new Color(144, 238, 144));
+                    }
+                    else {
+                        tiles[i][j].setBackground(Color.white);
+                    }
                     tiles[i][j].setText(String.valueOf(blocks[i][j].getSurr()));
                     continue;
                 }
