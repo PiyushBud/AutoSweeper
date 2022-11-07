@@ -34,7 +34,8 @@ public class Auto {
         this.i = i;
         this.j = j;
         this.board = board;
-        flagCount = (board.length * board[0].length)/4;
+        //Number of
+        flagCount = (board.length * board[0].length)/5;
     }
 
     /**
@@ -43,8 +44,11 @@ public class Auto {
      * @return Integer 0 if changes to board occur and -1 otherwise.
      */
     public int next(){
+        //List of visible surrounding blocks
         ArrayList<Block> vis = findSurroundingVis();
+        //List of invisible surrounding blocks
         ArrayList<Block> invis = findSurroundingInvis();
+        //Number of flags surrounding the current position
         int numFlags = countFlags();
         Block current = board[i][j];
 
