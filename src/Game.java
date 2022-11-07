@@ -7,15 +7,16 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 /**
- * Manages and runs the game UI. Displays grid of JButtons which act as the minesweeper blocks.
+ * Manages and runs the game UI. Uses a 2D array of JButtons to represent minesweeper blocks
+ * and uses a 2D array of Blocks to store Block status data.
  * Can be run in manual standard game mode or with the auto solving function.
  * NOTE: X and Y positions start at the top left ((0,0) is at the top left position). Y-axis is inverted.
  *
  * Standard mode functions as normal minesweeper with each user action updating the UI board and the
  * internal 2D array of blocks.
  *
- * Auto mode uses the Auto class to obtain a list of 2D Block arrays to record every board state in which the
- * algorithm made a meaningful change to the board.
+ * Auto mode uses the Auto class to obtain a list of 2D Block arrays to record every board state
+ * in which the algorithm made a meaningful change to the board.
  */
 public class Game implements MouseListener, KeyListener {
 
@@ -164,20 +165,26 @@ public class Game implements MouseListener, KeyListener {
             return;
         }
 
-        //
+        /*
+        Searches through board to find which JButton was clicked.
+        Checks if the internal 2D block array (blocks) is uninitialized, indicating that
+        this is the first left-click. Once blocks is initialized, left-clicks will attempt to reveal
+        the selected block and right clicks will attempt to flag selected block.
+         */
         for(int i = 0; i < tiles.length; i++) {
             for(int j = 0; j < tiles[i].length; j++) {
-                if(e.getSource() == tiles[i][j]) {
+                if(e.getSource() == tiles[i][j]) {  //Finds the button that was pressed
+                    //Checks if this is the first click on the board
                     if(blocks == null && e.getButton() == 1){
-                        blocks = Block.makeBoard(dim, i, j);
-                        showTile(i, j);
+                        blocks = Block.makeBoard(dim, i, j);    //Creates an internal block board
+                        showTile(i, j);     //Runs through the reveal algorithm at the clicked location
                         return;
                     }
-                    if(e.getButton() == 3){
-                        flag(tiles, i, j);
+                    if(e.getButton() == 3){     //Right click check
+                        flag(tiles, i, j);      //Flags the block if possible
                     }
-                    if(e.getButton() == 1 && !blocks[i][j].getFlag()){
-                        showTile(i, j);
+                    if(e.getButton() == 1 && !blocks[i][j].getFlag()){  //Left-click on a block
+                        showTile(i, j);     //Reveals selected block
                         return;
                     }
                 }
@@ -185,6 +192,13 @@ public class Game implements MouseListener, KeyListener {
         }
     }
 
+    /**
+     * Keyboard inputs for running the game on Auto mode.
+     * Checks for right and left arrow key presses.
+     * Right arrow key displays the next relevant board state produced by the algorithm.
+     * Left arrow key displays the previous board state.
+     * @param e The Keyboard input event.
+     */
     @Override
     public void keyPressed(KeyEvent e) {
         if(e.getKeyCode() == 39){
