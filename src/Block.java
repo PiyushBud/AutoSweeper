@@ -41,6 +41,11 @@ public class Block {
     private boolean aCurrent;
 
     /**
+     * The fraction of blocks per bomb. (1/BombFrac) per block.
+     */
+    public static final int BombFrac = 5;
+
+    /**
      * Constructor for a block.
      * @param i The Y position of the block.
      * @param j The X position of the block.
@@ -195,7 +200,7 @@ public class Block {
         }
 
         //Place bombs on to the board
-        for(int bombCap = (dim*dim)/5; bombCap > 0; bombCap--){
+        for(int bombCap = (dim*dim)/BombFrac; bombCap > 0; bombCap--){
 
             //Random coordinates for bomb placement
             num1 = r.nextInt(dim);
