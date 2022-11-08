@@ -81,7 +81,7 @@ public class Menu implements MouseListener {
     }
 
     /*
-    Unused methods from implementing mouse listener
+    Unused methods from implementing the mouse listener interface.
      */
     @Override
     public void mouseEntered(MouseEvent e) {

@@ -137,7 +137,6 @@ public class Auto {
             }
             count++;
         }
-        //System.out.println(retList.size());
         return retList;
     }
 

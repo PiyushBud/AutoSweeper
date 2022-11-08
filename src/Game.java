@@ -412,7 +412,7 @@ public class Game implements MouseListener, KeyListener {
     }
 
     /*
-     Unused methods from implementing mouse and keyboard listeners.
+     Unused methods from implementing the mouse and keyboard listener interfaces.
      */
     @Override
     public void mouseClicked(MouseEvent e) {}

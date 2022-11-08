@@ -5,15 +5,37 @@ import java.awt.event.MouseListener;
 
 public class EndScreen implements MouseListener {
 
-    private JPanel panel;
+    /**
+     * Frame for UI
+     */
     private JFrame frame;
+    /**
+     * Panel for UI
+     */
+    private JPanel panel;
 
+    /**
+     * Label displaying either "You Win!" or "Game Over!"
+     */
     private JLabel over;
 
-    private JButton exit;
+    /**
+     * Play button to launch standard game.
+     */
     private JButton play;
+    /**
+     * Auto button to launch the game with the auto solver enabled.
+     */
     private JButton auto;
+    /**
+     * Exit button.
+     */
+    private JButton exit;
 
+    /**
+     * Constructor. Sets up UI depending on the state of the win boolean.
+     * @param win Boolean for what kind of end screen to display.
+     */
     public EndScreen(boolean win){
         if (win){
             frame = new JFrame();
@@ -81,6 +103,12 @@ public class EndScreen implements MouseListener {
 
     }
 
+    /**
+     * Called when mouse click is released.
+     * Starts Play, Auto, or Exit depending on
+     * the button clicked.
+     * @param e The mouse event
+     */
     @Override
     public void mouseReleased(MouseEvent e) {
         if(e.getSource() == exit){
@@ -100,6 +128,9 @@ public class EndScreen implements MouseListener {
         }
     }
 
+    /*
+    Unused methods from implementing the mouse listener interface.
+     */
     @Override
     public void mouseEntered(MouseEvent e) {
 
