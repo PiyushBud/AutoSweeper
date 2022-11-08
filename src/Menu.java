@@ -5,11 +5,26 @@ import java.awt.event.MouseListener;
 
 public class Menu implements MouseListener {
 
+    /**
+     * Frame for UI
+     */
     private JFrame frame;
+    /**
+     * Panel for UI
+     */
     private JPanel panel;
 
+    /**
+     * Play button to launch standard game.
+     */
     private JButton play;
+    /**
+     * Auto button to launch the game with the auto solver enabled.
+     */
     private JButton auto;
+    /**
+     * Exit button.
+     */
     private JButton exit;
 
     /**
@@ -40,16 +55,6 @@ public class Menu implements MouseListener {
         frame.setVisible(true);
     }
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
-
     /**
      * Called when mouse click is released.
      * Starts Play, Auto, or Exit depending on
@@ -58,23 +63,26 @@ public class Menu implements MouseListener {
      */
     @Override
     public void mouseReleased(MouseEvent e) {
-        if(e.getSource() == exit){
+        if(e.getSource() == exit){ //Exit
             System.exit(0);
         }
 
-        if (e.getSource() == play) {
+        if (e.getSource() == play) { //Play
             frame.setVisible(false);
             frame.dispose();
-            new Game(20, false);
+            new Game(20, false); //Start new game without auto solver
         }
 
-        if (e.getSource() == auto){
+        if (e.getSource() == auto){ //Run with Auto
             frame.setVisible(false);
             frame.dispose();
-            new Game(20, true);
+            new Game(20, true); //Run the game with auto solver
         }
     }
 
+    /*
+    Unused methods from implementing mouse listener
+     */
     @Override
     public void mouseEntered(MouseEvent e) {
 
@@ -82,6 +90,16 @@ public class Menu implements MouseListener {
 
     @Override
     public void mouseExited(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
 
     }
 }

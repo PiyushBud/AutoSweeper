@@ -81,17 +81,6 @@ public class EndScreen implements MouseListener {
 
     }
 
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
-
     @Override
     public void mouseReleased(MouseEvent e) {
         if(e.getSource() == exit){
@@ -121,7 +110,15 @@ public class EndScreen implements MouseListener {
 
     }
 
-    public static void main(String args[]){
-        new EndScreen(true);
+    @Override
+    public void mouseClicked(MouseEvent e) {
+
     }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+
 }
