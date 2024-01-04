@@ -1,4 +1,4 @@
-# AutoSweeper-WIP-
+# AutoSweeper
 MineSweeper with autosweep algorithm
 
 Menu Options:
